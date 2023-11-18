@@ -24,3 +24,30 @@ https://github.com/siita60/poc-image-builder/settings/secrets/actions
 * https://aws.amazon.com/jp/blogs/opensource/github-actions-aws-fargate/
 * https://qiita.com/y_k_individual/items/064e058c5e280c161b7f
 * https://zenn.dev/kou_pg_0131/articles/gh-actions-ecr-push-image
+
+* Github Actions で AWS の認証を通す
+  * https://docs.github.com/ja/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+
+* ここに、role に指定する信頼ポリシーの例がある
+  * https://docs.aws.amazon.com/ja_jp/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html#idp_oidc_Create_GitHub
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::{ AWS account ID }:oidc-provider/token.actions.githubusercontent.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+          "token.actions.githubusercontent.com:sub": "repo:{organization or userID}/{repository name}:ref:refs/heads/{branch name}"
+        }
+      }
+    }
+  ]
+}
+```
