@@ -51,3 +51,23 @@ https://github.com/siita60/poc-image-builder/settings/secrets/actions
   ]
 }
 ```
+
+# ハマりポイント
+
+## Could Not credential なんか上手く認証できないらしい
+
+```
+Run aws-actions/configure-aws-credentials@v3
+  with:
+    role-to-assume: ***
+    aws-region: ap-northeast-1
+    audience: sts.amazonaws.com
+```
+
+このログで良いのか？
+
+### GitHub Actions の secret 設定
+* job の設定の中で、 environment 名を明確に指定しないと env や　secrets から値を取得できない？
+* 参考
+  * [[GitHub Actions] ブランチごとにジョブの実行を制御できる Environments を試してみた](https://dev.classmethod.jp/articles/github-actions-environment-secrets-and-environment-variables/)
+  * []()
