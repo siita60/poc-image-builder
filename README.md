@@ -54,20 +54,33 @@ https://github.com/siita60/poc-image-builder/settings/secrets/actions
 
 # ハマりポイント
 
-## Could Not credential なんか上手く認証できないらしい
+## environment を入れないと secret が取得できず、上手くいかない
 
+エラーログ
 ```
-Run aws-actions/configure-aws-credentials@v3
-  with:
-    role-to-assume: ***
-    aws-region: ap-northeast-1
-    audience: sts.amazonaws.com
+Credentials could not be loaded, please check your action inputs: Could not load credentials from any providers
 ```
 
-このログで良いのか？
-
-### GitHub Actions の secret 設定
-* job の設定の中で、 environment 名を明確に指定しないと env や　secrets から値を取得できない？
+* 基本的な使い方は [GitHub Actions でのシークレットの使用](https://docs.github.com/ja/actions/security-guides/using-secrets-in-github-actions) に書いてあるとおり
+* ただし、 job の設定の中で、 environment 名を明確に指定しないと env や　secrets から値を取得できない？
 * 参考
   * [[GitHub Actions] ブランチごとにジョブの実行を制御できる Environments を試してみた](https://dev.classmethod.jp/articles/github-actions-environment-secrets-and-environment-variables/)
-  * []()
+
+こういう感じ↓
+
+```
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    environment: <ここに、設定した Environments の名称を入れる：参考：https://github.com/siita60/poc-image-builder/settings/environments>
+```
+
+
+## Assume Role が上手くいかない
+
+エラーログ
+```
+Could not assume role with OIDC: Not authorized to perform sts:AssumeRoleWithWebIdentity
+```
+
+なんで？
