@@ -83,4 +83,29 @@ jobs:
 Could not assume role with OIDC: Not authorized to perform sts:AssumeRoleWithWebIdentity
 ```
 
+### repository の指定方法が想定では動かなかった
+
+ダメだったパターン
+```
+            "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:sub": "repo:siita60/poc-image-builder:refs/heads/develop",
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                }
+            }
+```
+
+OK だったパターン
+```
+            "Condition": {
+                "StringLike": {
+                    "token.actions.githubusercontent.com:sub": "repo:siita60/poc-image-builder:*"
+                },
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+                }
+            }
+
+```
+
 なんで？
