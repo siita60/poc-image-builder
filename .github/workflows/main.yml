@@ -12,13 +12,13 @@ permissions:
 jobs:
   push:
     runs-on: ubuntu-latest
+    environment: sample
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v3
-        environment: sample
         with:
           role-to-assume: ${{ secrets.ASSUME_ROLE }}
           aws-region: ap-northeast-1
